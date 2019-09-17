@@ -2,7 +2,6 @@ package chords
 
 import(
 	"strings"
-	"fmt"
 	"strconv"
 )
 
@@ -65,13 +64,6 @@ func CreateEmptyBoard() []string {
 	newBoard := fretBoard[:]
 	return newBoard
 
-}
-
-func PrintChords(fretBoard []string) {
-
-	for _, row := range fretBoard {
-		fmt.Printf(row)
-	}
 }
 
 /*
