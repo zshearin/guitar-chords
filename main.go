@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/zshearin/guitar-chords/chords"
 	
-	"github.com/zshearin/guitar-chords/chords/board"
 	"strings"
 )
 
@@ -23,19 +22,6 @@ type song struct {
 */
 
 func main() {
-	/*
-	var song [3]string
-	song[0] = "A"
-	song[1] = "C"
-	song[2] = "D"
-
-	chords.PrintChordSequence(song[:])
-	*/
-	/*
-	chords.PrintChord("A")
-	chords.PrintChord("C")
-	chords.PrintChord("D")	
-	*/
 
 	var aChord, dChord, gChord []string
 
@@ -43,17 +29,15 @@ func main() {
 	dChord = chords.GetChordToPrint("D")
 	gChord = chords.GetChordToPrint("G")
 	
-	
-	board.PrintLines(aChord)
-	board.PrintLines(dChord)
+	/*	
+	chords.PrintChords(aChord)
+	chords.PrintChords(dChord)
+	*/
 
 	newBoard := combineBoard(aChord, dChord)
-
-	board.PrintLines(newBoard)
-	
+	//chords.PrintChords(newBoard)
 	newBoard2 := combineBoard(newBoard, gChord)
-	
-	board.PrintLines(newBoard2)
+	chords.PrintChords(newBoard2)
 
 }
 
