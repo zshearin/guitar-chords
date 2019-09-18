@@ -21,22 +21,29 @@ func main() {
 	
 	//Combine repeated and non repeated parts
 	verse := format.CombineTwoBoards(board,board2, true)
+	
+	
+	
 	//Get chorus
 	chordsChorus := []string{"C2","G","Am7","Dsus"}
 	chorus := getBoardForChordsWithRepeat(chordsChorus, 2)
 	
+	//Get bridge
+	//bridgeLine1
 	chordsBridgeLine1 := []string{"C2", "G", "Am7", "G"}
-
 	chordsBridgeLine1SingleMeasure := []string{"Dsus"}
+	
 	singleMeasure := getBoardForChords(chordsBridgeLine1SingleMeasure)
-
-	chordsBridgeLine2 := []string{"C2", "G", "Dsus", "Dsus"}
-
 	bridgeLine1 := getBoardForChords(chordsBridgeLine1)
-	bridgeLine2 := getBoardForChords(chordsBridgeLine2)
-
+	
+	//add singleMeasure to bridgeLine1
 	bridgeLine1 = format.CombineTwoBoards(bridgeLine1, singleMeasure, false)
 
+	//bridgeLine2
+	chordsBridgeLine2 := []string{"C2", "G", "Dsus", "Dsus"}
+	bridgeLine2 := getBoardForChords(chordsBridgeLine2)
+
+	
 	fmt.Println("Verse")
 	print.PrintLine(verse)
 	fmt.Println("\n\nChorus")
