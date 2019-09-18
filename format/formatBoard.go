@@ -92,7 +92,7 @@ func AddRepeatLine(fretBoard []string, repeatTimes int) []string {
 
 
 
-func CombineTwoBoards(board1 []string, board2 []string, measureSeparator bool) []string {
+func CombineTwoBoards(board1 []string, board2 []string, separateWithMeasureBar bool) []string {
 
 	var sb strings.Builder
 	var newBoard [11]string
@@ -102,7 +102,7 @@ func CombineTwoBoards(board1 []string, board2 []string, measureSeparator bool) [
 		str2 := board2[i]
 		str1 = strings.TrimSuffix(str1, "\n")
 		str1 = strings.TrimSuffix(str1, "   ")
-		if (measureSeparator) {
+		if (separateWithMeasureBar) {
 			sb.WriteString(str1)
 			sb.WriteString(" ")
 			sb.WriteString(chordEndMeasure)
