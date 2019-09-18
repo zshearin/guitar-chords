@@ -5,22 +5,57 @@ import(
 	"strconv"
 )
 
-func GetChordToPrint(chordName string) []string {
+type ChordPrint struct {
+	Name string
+	Value []string
+}
+
+
+func GetRowFromChordArray(chordNames []string) [][]string {
+	var chordLine [][]string
+	for _, val := range chordNames {
+
+		curChord := GetChordToPrint(val)
+		chordLine = append(chordLine, curChord.Value)
+
+	}
+
+	return chordLine
+}
+
+func GetChordToPrint(chordName string) ChordPrint {
+	var chordToReturn ChordPrint
+	chordToReturn.Name = chordName
+	
 	chord := getChord(chordName)
-	fretBoard := CreateEmptyBoard()
-	newBoard := addFingerPlacements(chord, fretBoard)
+	newBoard := CreateEmptyBoard()
+	newBoard = addFingerPlacements(chord, newBoard)
 	newBoard = addStringsToPlay(chord, newBoard)
-	return newBoard
+	newBoard = addNoteName(chordName, newBoard)
+	
+	chordToReturn.Value = newBoard
+	return chordToReturn
 }
 
 func getChord(chordName string) chord {
-	return chordDict[chordName]
+
+	if  strings.Contains(chordName, "sus") {
+		return chordDictSus[chordName]
+
+	} else if strings.Contains(chordName, "/") {
+		return chordDictSlash[chordName]
+	} else if strings.Contains(chordName, "m7") {
+		return chordDictMinor7[chordName]	
+	} else {
+		return chordDict[chordName]
+
+	}
 }
 
 func addFingerPlacements(theChord chord, fretBoard []string) []string {
 
 	for _, place := range theChord.fingerPlacements {
-		fretBoard = AddFingerPlacement(fretBoard,place.string-1,place.fret-1,place.finger)
+		fretBoard = addFingerPlacement(fretBoard,place.string-1,place.fret-1,place.finger)
 	}
 	return fretBoard
 
@@ -69,27 +104,71 @@ func CreateEmptyBoard() []string {
 /*
 fretBoard - current state of the board
 */
-func AddFingerPlacement(fretBoard []string, x, y, val int) []string {
+func addFingerPlacement(fretBoard []string, x, y, val int) []string {
 
 	curString := fretBoard[y+3]
 	curStringBytes := []byte(curString)
 
-	index1 := 2*x
-	byteArray1 := curStringBytes[:index1]
-	index2 := index1 + 1
+	byteArrayBefore := curStringBytes[:(2*x)]
+	byteArrayAfter := curStringBytes[(2*x+1):]
 
-	str := strconv.Itoa(val)
-	byteArray2 := []byte(str)
+	str1 := string(byteArrayBefore)
+	str2 := strconv.Itoa(val)
+	str3 := string(byteArrayAfter)
 
-	byteArray3 := curStringBytes[index2:]
-	fullArray := append(byteArray1)
+	var sb strings.Builder
+	sb.WriteString(str1)
+	sb.WriteString(str2)
+	sb.WriteString(str3)
 
-	for _, value := range byteArray2 {
-		fullArray = append(fullArray, value)
-	}
-	for _, value := range byteArray3 {
-		fullArray = append(fullArray, value)
-	}
-	fretBoard[y+3] = string(fullArray)
+	fretBoard[y+3] = sb.String()
+	sb.Reset()
 	return fretBoard
 }
+
+func addNoteName(noteName string, fretBoard []string) []string {
+
+	var sb strings.Builder
+
+	//Formatting based on length
+	//===========	
+	//===  G  ===
+	//=== C2  ===
+	//=== Am7 ===
+	//===Dsus ===
+	//===========	
+	
+	if (len(noteName) == 1) {
+		sb.WriteString("===  ")
+		sb.WriteString(noteName)
+		sb.WriteString("  ===")
+	} else if (len(noteName) == 2) {
+		sb.WriteString("=== ")
+		sb.WriteString(noteName)
+		sb.WriteString("  ===")
+
+	} else if (len(noteName) == 3) {
+		sb.WriteString("=== ")
+		sb.WriteString(noteName)
+		sb.WriteString(" ===")
+
+	} else if (len(noteName) == 4) {
+		sb.WriteString("===")
+		sb.WriteString(noteName)
+		sb.WriteString(" ===")
+
+	} else if (len(noteName) == 5) {
+		sb.WriteString("===")
+		sb.WriteString(noteName)
+		sb.WriteString("===")
+	
+	} else {
+		sb.WriteString("===========")
+	}
+	sb.WriteString("\n")
+	fretBoard[0] = sb.String()
+	sb.Reset()
+	return fretBoard
+}
+
+
